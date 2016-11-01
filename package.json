@@ -1,0 +1,78 @@
+{
+  "name": "grid-draggable",
+  "version": "0.0.0",
+  "description": "grid draggable system",
+  "homepage": "",
+  "author": {
+    "name": "chilijung",
+    "email": "chilijung@gmail.com",
+    "url": ""
+  },
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "keywords": [
+    "grid",
+    "drag",
+    "dnd",
+    "draggable"
+  ],
+  "devDependencies": {
+    "eslint": "^3.1.1",
+    "eslint-config-google": "^0.4.0",
+    "eslint-plugin-react": "^6.2.0",
+    "babel-eslint": "^6.1.2",
+    "precommit-hook-eslint": "^3.0.0",
+    "babel-cli": "^6.14.0",
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.3",
+    "babel-preset-airbnb": "^2.0.0",
+    "cross-env": "^2.0.1",
+    "babel-plugin-transform-class-properties": "^6.16.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.2.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-runtime": "^6.11.6",
+    "rimraf": "^2.5.4",
+    "karma": "^1.2.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-cli": "^1.0.1",
+    "karma-mocha": "^1.1.1",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.8.0",
+    "chai": "^3.5.0",
+    "react-addons-test-utils": "^15.3.1",
+    "enzyme": "^2.4.1",
+    "webpack": "^1.13.2",
+    "mocha": "^2.4.5",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "babel-preset-react-hmre": "1.1.1",
+    "webpack-hot-middleware": "^2.12.2",
+    "express": "^4.14.0"
+  },
+  "scripts": {
+    "lint": "eslint src test docs",
+    "clean": "rimraf lib dist",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build": "npm run build:commonjs",
+    "prepublish": "npm run clean && npm run check:src && npm run build",
+    "check:src": "npm run lint && npm run test",
+    "test": "cross-env BABEL_ENV=test karma start --single-run",
+    "test:watch": "cross-env BABEL_ENV=test karma start",
+    "start": "node devServer.js",
+    "build:docs": "cross-env BABEL_ENV=production ./node_modules/.bin/webpack --config webpack.config.prod.js",
+    "postpublish": "npm run build:docs",
+    "validate": "npm ls"
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "repository": "Canner/grid-draggable",
+  "peerDependencies": {
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1"
+  },
+  "license": "MIT"
+}
