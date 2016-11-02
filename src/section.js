@@ -20,7 +20,9 @@ export default class Section extends Component {
     children: PropTypes.any,
     dragStart: PropTypes.func,
     onDrag: PropTypes.func,
-    dragStop: PropTypes.func
+    dragStop: PropTypes.func,
+    className: PropTypes.string,
+    style: PropTypes.object
   };
 
   static defaultProps = {
@@ -69,11 +71,16 @@ export default class Section extends Component {
   }
 
   render() {
-    const {children, gridKey} = this.props; // eslint-disable-line react/prop-types
+    const {children, gridKey, className, style} = this.props; // eslint-disable-line react/prop-types
     const {dragging} = this.state;
 
     return (
-      <div ref="grid" role="draggable-grid" data-grid-key={gridKey}>
+      <div
+        ref="grid"
+        role="draggable-grid"
+        data-grid-key={gridKey}
+        className={className}
+        style={style}>
         {
           dragging ? (
             <div style={{position: 'absolute'}}>
