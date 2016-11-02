@@ -9,6 +9,7 @@ export default class GridDraggable extends Component {
     this.swapGrid = this.swapGrid.bind(this);
     this.setBounding = this.setBounding.bind(this);
     this.matchGrid = this.matchGrid.bind(this);
+    this.getMatchGrid = this.getMatchGrid.bind(this);
     this.bounding = {};
 
     const childrenWithProps = Children.map(this.props.children,
@@ -18,7 +19,7 @@ export default class GridDraggable extends Component {
         dragStop: props.dragStop,
         swapGrid: that.swapGrid,
         setBounding: that.setBounding,
-        matchGrid: that.matchGrid,
+        getMatchGrid: that.getMatchGrid,
         gridKey: i
       })
     );
@@ -56,6 +57,25 @@ export default class GridDraggable extends Component {
     });
 
     return filterGrid;
+  }
+
+  getMatchGrid(mouse) {
+    const filterGrid = this.matchGrid(mouse);
+    const allGridEle = Array.prototype.slice.call(
+                          document.querySelectorAll('[data-grid-key]'));
+
+    if (filterGrid.length) {
+      const matchNode = filterGrid.map(grid => {
+        const key = grid.key;
+        return allGridEle.filter(node => {
+          return +node.getAttribute('data-grid-key') === key; // eslint-disable-line no-implicit-coercion
+        });
+      });
+
+      return matchNode[0];
+    }
+
+    return null;
   }
 
   swapGrid(mouse, fromKey) {

@@ -22,7 +22,9 @@ export default class Section extends Component {
     onDrag: PropTypes.func,
     dragStop: PropTypes.func,
     className: PropTypes.string,
-    style: PropTypes.object
+    style: PropTypes.object,
+    dragClassName: PropTypes.string,
+    handle: PropTypes.string
   };
 
   static defaultProps = {
@@ -37,9 +39,9 @@ export default class Section extends Component {
   }
 
   handleDrag(e, data) {
-    const {onDrag, matchGrid} = this.props; // eslint-disable-line react/prop-types
-    const match = matchGrid({clientX: e.clientX, clientY: e.clientY});
-    onDrag(e, data, match.length ? match : null);
+    const {onDrag, getMatchGrid} = this.props; // eslint-disable-line react/prop-types
+    const match = getMatchGrid({clientX: e.clientX, clientY: e.clientY});
+    onDrag(e, data, match);
   }
 
   handleStop(e, data) {
@@ -71,7 +73,14 @@ export default class Section extends Component {
   }
 
   render() {
-    const {children, gridKey, className, style} = this.props; // eslint-disable-line react/prop-types
+    const {
+      children,
+      gridKey, // eslint-disable-line react/prop-types
+      className,
+      style,
+      dragClassName,
+      handle
+    } = this.props;
     const {dragging} = this.state;
 
     return (
@@ -92,10 +101,11 @@ export default class Section extends Component {
           defaultPosition={{x: 0, y: 0}}
           position={dragging ? null : {x: 0, y: 0}}
           zIndex={100}
+          handle={handle}
           onStart={this.handleStart}
           onDrag={this.handleDrag}
           onStop={this.handleStop}>
-          <div>
+          <div className={dragging ? dragClassName : null}>
             {children}
           </div>
         </Draggable>

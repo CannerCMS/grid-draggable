@@ -5,8 +5,15 @@ import {range} from 'lodash';
 
 const list = range(20).map((col, i) => {
   return (
-    <Section key={i} style={{width: '100%', height: '100px'}}>
-      <div style={{width: '100%', height: '100px'}} key={i}>{col}</div>
+    <Section
+      key={i}
+      style={{width: '100%', height: '100px'}}
+      handle=".handle"
+      dragClassName="dragging">
+      <div style={{width: '100%', height: '100px'}} key={i}>
+        {col}
+        <button className="handle">Click me to drag</button>
+      </div>
     </Section>
   );
 });
@@ -26,6 +33,13 @@ class Demo extends Component {
 
   onDrag(e, data, match) {
     console.log('drag: ', data, match);
+    if (match && match[0] !== data.node.parentNode) {
+      this.match = match[0];
+      match[0].style.backgroundColor = '#CCC';
+    } else if (this.match) {
+      this.match.style.backgroundColor = null;
+      this.match = null;
+    }
   }
 
   dragStop(e, data) {
