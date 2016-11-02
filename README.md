@@ -10,9 +10,61 @@ $ npm install --save grid-draggable
 ## Usage
 
 ```js
-var gridDraggable = require('grid-draggable');
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
+import GridDraggable, {Section} from 'GridDraggable';
+import {range} from 'lodash';
 
-gridDraggable('Rainbow');
+const list = range(20).map((col, i) => {
+  return (
+    <Section key={i}>
+      <div key={i}>{col}</div>
+    </Section>
+  );
+});
+
+class Demo extends Component {
+  constructor(props) {
+    super(props);
+
+    this.dragStart = this.dragStart.bind(this);
+    this.onDrag = this.onDrag.bind(this);
+    this.dragStop = this.dragStop.bind(this);
+  }
+
+  dragStart(e, data) {
+    console.log('start: ', data);
+  }
+
+  onDrag(e, data, match) {
+    console.log('drag: ', data, match);
+  }
+
+  dragStop(e, data) {
+    console.log('stop: ', data);
+  }
+
+  render() {
+    return (
+      <GridDraggable
+        dragStart={this.dragStart}
+        onDrag={this.onDrag}
+        dragStop={this.dragStop}
+        lg={4}
+        md={3}
+        xs={6}
+        rowClassName="row-test"
+        colClassName="col-test">
+        {list}
+      </GridDraggable>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Demo/>
+, document.getElementById('root'));
+
 ```
 
 ## Start example server
@@ -23,7 +75,7 @@ node devServer.js
 
 ## License
 
-MIT © [chilijung]()
+MIT © [Canner](https://github.com/canner)
 
 
 [npm-image]: https://badge.fury.io/js/grid-draggable.svg
