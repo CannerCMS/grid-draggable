@@ -24,8 +24,8 @@ class Demo extends Component {
     console.log('start: ', data);
   }
 
-  onDrag(e, data) {
-    console.log('drag: ', data);
+  onDrag(e, data, match) {
+    console.log('drag: ', data, match);
   }
 
   dragStop(e, data) {

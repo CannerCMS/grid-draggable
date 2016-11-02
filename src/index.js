@@ -8,6 +8,7 @@ export default class GridDraggable extends Component {
     const that = this;
     this.swapGrid = this.swapGrid.bind(this);
     this.setBounding = this.setBounding.bind(this);
+    this.matchGrid = this.matchGrid.bind(this);
     this.bounding = {};
 
     const childrenWithProps = Children.map(this.props.children,
@@ -16,8 +17,9 @@ export default class GridDraggable extends Component {
         onDrag: props.onDrag,
         dragStop: props.dragStop,
         swapGrid: that.swapGrid,
-        gridKey: i,
-        setBounding: that.setBounding
+        setBounding: that.setBounding,
+        matchGrid: that.matchGrid,
+        gridKey: i
       })
     );
 
@@ -33,8 +35,7 @@ export default class GridDraggable extends Component {
     dragStop: PropTypes.func
   };
 
-  swapGrid(mouse, fromKey) {
-    const {children} = this.state;
+  matchGrid(mouse) {
     const {clientX, clientY} = mouse;
     const pickRect = pickBy(
       this.bounding,
@@ -53,6 +54,13 @@ export default class GridDraggable extends Component {
 
       return false;
     });
+
+    return filterGrid;
+  }
+
+  swapGrid(mouse, fromKey) {
+    const {children} = this.state;
+    const filterGrid = this.matchGrid(mouse);
 
     if (filterGrid.length > 0) {
       // create new array for children.

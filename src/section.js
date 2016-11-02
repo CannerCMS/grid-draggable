@@ -35,7 +35,9 @@ export default class Section extends Component {
   }
 
   handleDrag(e, data) {
-    this.props.onDrag(e, data);
+    const {onDrag, matchGrid} = this.props; // eslint-disable-line react/prop-types
+    const match = matchGrid({clientX: e.clientX, clientY: e.clientY});
+    onDrag(e, data, match.length ? match : null);
   }
 
   handleStop(e, data) {
