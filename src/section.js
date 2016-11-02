@@ -39,40 +39,38 @@ export default class Section extends Component {
   }
 
   handleStop(e, data) {
-    const {swapGrid, dragStop} = this.props; // eslint-disable-line react/prop-types
-    this.setState({dragging: false});
+    const {dragStop} = this.props; // eslint-disable-line react/prop-types
+    dragStop(e, data);
 
     // swap when stop!
     const grandParentNode = data.node.parentNode.parentNode;
-    const nextNode = grandParentNode.nextSibling;
-    const prevNode = grandParentNode.previousSibling;
-
-    const nextNodeWidth = nextNode &&
-      nextNode.children[0].getAttribute('role') === 'draggable-grid' ?
-      nextNode.clientWidth : null;
-    const prevNodeWidth = prevNode &&
-      prevNode.children[0].getAttribute('role') === 'draggable-grid' ?
-      prevNode.clientWidth : null;
-
     const fromKey = grandParentNode.children[0].getAttribute('data-grid-key');
-    if (nextNode && nextNodeWidth && data.x > nextNodeWidth) {
-      // swap place with the next tab
-      const nextKey = nextNode.children[0].getAttribute('data-grid-key');
-      swapGrid(+fromKey, +nextKey);
-    } else if (prevNode && prevNodeWidth && data.x < -prevNodeWidth) {
-      // swap place with the previous tab
-      const prevKey = prevNode.children[0].getAttribute('data-grid-key');
-      swapGrid(+fromKey, +prevKey);
+    this.setState({
+      dragging: false,
+      fromKey,
+      e
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const {e, fromKey, dragging} = this.state;
+    if (prevState.dragging && !dragging) {
+      this.props.swapGrid({clientX: e.clientX, clientY: e.clientY}, +fromKey);  // eslint-disable-line react/prop-types
     }
-    dragStop(e, data);
+  }
+
+  componentDidMount() {
+    const {setBounding, gridKey} = this.props; // eslint-disable-line react/prop-types
+    setBounding(+gridKey, this.refs.grid.getBoundingClientRect());
   }
 
   render() {
     const {children, gridKey} = this.props; // eslint-disable-line react/prop-types
     const {dragging} = this.state;
+    console.log('render')
 
     return (
-      <div role="draggable-grid" data-grid-key={gridKey}>
+      <div ref="grid" role="draggable-grid" data-grid-key={gridKey}>
         {
           dragging ? (
             <div style={{position: 'absolute'}}>
