@@ -17,7 +17,7 @@ export default class GridDraggable extends Component {
     );
 
     this.state = {
-      children: Children.toArray(childrenWithProps)
+      children: childrenWithProps
     };
   }
 
@@ -53,12 +53,13 @@ export default class GridDraggable extends Component {
   render() {
     const {children, dragStart, onDrag, dragStop, ...rest} = this.props; // eslint-disable-line
     const modifiedChildren = this.state.children;
-    console.log(modifiedChildren)
 
     return (
-      <GridBreakpoint {...rest}>
-        {modifiedChildren}
-      </GridBreakpoint>
+      <div>
+        <GridBreakpoint {...rest}>
+          {modifiedChildren}
+        </GridBreakpoint>
+      </div>
     );
   }
 }

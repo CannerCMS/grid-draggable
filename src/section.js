@@ -18,11 +18,9 @@ export default class Section extends Component {
 
   static propTypes = {
     children: PropTypes.any,
-    gridKey: PropTypes.number.isRequired,
     dragStart: PropTypes.func,
     onDrag: PropTypes.func,
-    dragStop: PropTypes.func,
-    swapGrid: PropTypes.func.isRequired
+    dragStop: PropTypes.func
   };
 
   static defaultProps = {
@@ -37,8 +35,14 @@ export default class Section extends Component {
   }
 
   handleDrag(e, data) {
-    const {swapGrid, onDrag} = this.props;
+    this.props.onDrag(e, data);
+  }
 
+  handleStop(e, data) {
+    const {swapGrid, dragStop} = this.props; // eslint-disable-line react/prop-types
+    this.setState({dragging: false});
+
+    // swap when stop!
     const grandParentNode = data.node.parentNode.parentNode;
     const nextNode = grandParentNode.nextSibling;
     const prevNode = grandParentNode.previousSibling;
@@ -60,16 +64,11 @@ export default class Section extends Component {
       const prevKey = prevNode.children[0].getAttribute('data-grid-key');
       swapGrid(+fromKey, +prevKey);
     }
-    onDrag(e, data);
-  }
-
-  handleStop(e, data) {
-    this.setState({dragging: false});
-    this.props.dragStop(e, data);
+    dragStop(e, data);
   }
 
   render() {
-    const {children, gridKey} = this.props;
+    const {children, gridKey} = this.props; // eslint-disable-line react/prop-types
     const {dragging} = this.state;
 
     return (

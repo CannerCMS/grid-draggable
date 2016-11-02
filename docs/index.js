@@ -5,7 +5,7 @@ import {range} from 'lodash';
 
 const list = range(20).map((col, i) => {
   return (
-    <Section>
+    <Section key={i}>
       <div key={i}>{col}</div>
     </Section>
   );

@@ -78,7 +78,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "grid-breakpoint": "^0.1.2",
+    "grid-breakpoint": "^0.2.0",
     "lodash": "^4.16.6",
     "react-draggable": "^2.2.2"
   }
