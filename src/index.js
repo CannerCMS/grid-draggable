@@ -54,25 +54,25 @@ export default class GridDraggable extends Component {
       return false;
     });
 
-    // create new array for children.
-    const newChildren = children.slice();
-    const toKey = filterGrid[0].key;
+    if (filterGrid.length > 0) {
+      // create new array for children.
+      const newChildren = children.slice();
+      const toKey = filterGrid[0].key;
 
-    if (fromKey !== undefined && toKey !== undefined) {
-      const fromIndex = children.findIndex(child =>
-        child.props.gridKey === fromKey);
-      const toIndex = children.findIndex(child =>
-        child.props.gridKey === toKey);
-      const tmp = newChildren[fromIndex];
-      newChildren[fromIndex] = newChildren[toIndex];
-      newChildren[toIndex] = tmp;
+      if (fromKey !== undefined && toKey !== undefined) {
+        const fromIndex = children.findIndex(child =>
+          child.props.gridKey === fromKey);
+        const toIndex = children.findIndex(child =>
+          child.props.gridKey === toKey);
+        const tmp = newChildren[fromIndex];
+        newChildren[fromIndex] = newChildren[toIndex];
+        newChildren[toIndex] = tmp;
+      }
+
+      this.setState({
+        children: newChildren
+      });
     }
-
-    console.log('swap', fromKey, toKey)
-
-    this.setState({
-      children: newChildren
-    });
   }
 
   setBounding(key, bound) {
@@ -85,8 +85,6 @@ export default class GridDraggable extends Component {
   render() {
     const {children, dragStart, onDrag, dragStop, ...rest} = this.props; // eslint-disable-line
     const modifiedChildren = this.state.children;
-    console.log('render whole')
-
     return (
       <div>
         <GridBreakpoint {...rest}>

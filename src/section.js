@@ -50,6 +50,8 @@ export default class Section extends Component {
       fromKey,
       e
     });
+
+    return false;
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -67,7 +69,6 @@ export default class Section extends Component {
   render() {
     const {children, gridKey} = this.props; // eslint-disable-line react/prop-types
     const {dragging} = this.state;
-    console.log('render')
 
     return (
       <div ref="grid" role="draggable-grid" data-grid-key={gridKey}>
