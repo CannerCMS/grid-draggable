@@ -119,7 +119,12 @@ export default class Section extends Component {
           onDrag={this.handleDrag}
           onStop={this.handleStop}>
           <div
-            style={{position: 'absolute', top: 0, left: 0, zIndex: 100}}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: dragging ? 200 : 100
+            }}
             className={dragging ? dragClassName : null}>
             {children}
           </div>
