@@ -5,24 +5,14 @@ import {pickBy} from 'lodash';
 export default class GridDraggable extends Component {
   constructor(props) {
     super(props);
-    const that = this;
     this.swapGrid = this.swapGrid.bind(this);
     this.setBounding = this.setBounding.bind(this);
     this.matchGrid = this.matchGrid.bind(this);
     this.getMatchGrid = this.getMatchGrid.bind(this);
+    this.cloneChildren = this.cloneChildren.bind(this);
     this.bounding = {};
 
-    const childrenWithProps = Children.map(this.props.children,
-      (child, i) => React.cloneElement(child, {
-        dragStart: props.dragStart,
-        onDrag: props.onDrag,
-        dragStop: props.dragStop,
-        swapGrid: that.swapGrid,
-        setBounding: that.setBounding,
-        getMatchGrid: that.getMatchGrid,
-        gridKey: i
-      })
-    );
+    const childrenWithProps = this.cloneChildren(props);
 
     this.state = {
       children: childrenWithProps
@@ -35,6 +25,31 @@ export default class GridDraggable extends Component {
     onDrag: PropTypes.func,
     dragStop: PropTypes.func
   };
+
+  componentWillReceiveProps(nextProps) {
+    const childrenWithProps = this.cloneChildren(nextProps);
+
+    this.setState({
+      children: childrenWithProps
+    });
+  }
+
+  cloneChildren(props) {
+    const that = this;
+    const childrenWithProps = Children.map(props.children,
+      (child, i) => React.cloneElement(child, {
+        dragStart: props.dragStart,
+        onDrag: props.onDrag,
+        dragStop: props.dragStop,
+        swapGrid: that.swapGrid,
+        setBounding: that.setBounding,
+        getMatchGrid: that.getMatchGrid,
+        gridKey: i
+      })
+    );
+
+    return childrenWithProps;
+  }
 
   matchGrid(mouse) {
     const {clientX, clientY} = mouse;
