@@ -21,6 +21,7 @@ export default class GridDraggable extends Component {
 
   static propTypes = {
     children: PropTypes.any,
+    onSwap: PropTypes.func,
     dragStart: PropTypes.func,
     onDrag: PropTypes.func,
     dragStop: PropTypes.func
@@ -101,6 +102,7 @@ export default class GridDraggable extends Component {
   }
 
   swapGrid(mouse, fromKey) {
+    const {onSwap} = this.props;
     const {children} = this.state;
     const filterGrid = this.matchGrid(mouse);
 
@@ -117,6 +119,8 @@ export default class GridDraggable extends Component {
         const tmp = newChildren[fromIndex];
         newChildren[fromIndex] = newChildren[toIndex];
         newChildren[toIndex] = tmp;
+
+        onSwap(fromIndex, toIndex);
       }
 
       this.setState({

@@ -25,6 +25,7 @@ class Demo extends Component {
     this.dragStart = this.dragStart.bind(this);
     this.onDrag = this.onDrag.bind(this);
     this.dragStop = this.dragStop.bind(this);
+    this.onSwap = this.onSwap.bind(this);
   }
 
   dragStart(e, data) {
@@ -46,6 +47,10 @@ class Demo extends Component {
     console.log('stop: ', data);
   }
 
+  onSwap(from, to) {
+    console.log(from, to);
+  }
+
   render() {
     return (
       <div>
@@ -54,6 +59,7 @@ class Demo extends Component {
           dragStart={this.dragStart}
           onDrag={this.onDrag}
           dragStop={this.dragStop}
+          onSwap={this.onSwap}
           lg={4}
           md={3}
           xs={6}
