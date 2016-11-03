@@ -89,7 +89,7 @@ export default class Section extends Component {
         role="draggable-grid"
         data-grid-key={gridKey}
         className={className}
-        style={style}>
+        style={{...style, position: 'relative'}}>
         {
           dragging ? (
             <div style={{position: 'absolute'}}>
@@ -105,7 +105,9 @@ export default class Section extends Component {
           onStart={this.handleStart}
           onDrag={this.handleDrag}
           onStop={this.handleStop}>
-          <div className={dragging ? dragClassName : null}>
+          <div
+            style={{position: 'absolute'}}
+            className={dragging ? dragClassName : null}>
             {children}
           </div>
         </Draggable>
