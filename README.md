@@ -9,6 +9,9 @@ $ npm install --save grid-draggable
 
 ## Usage
 
+**IMPORTANT NOTE:** You need to use `webpack` as build tool, cause the grid system is based on [react-flexbox-grid](https://github.com/roylee0704/react-flexbox-grid), it'll load [flexboxgrid](https://github.com/kristoferjoseph/flexboxgrid) via `style-loader` and `css-loader` make sure you installed both of them.
+
+
 ```js
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
