@@ -10,6 +10,7 @@ export default class Section extends Component {
     this.handleStart = this.handleStart.bind(this);
     this.handleDrag = this.handleDrag.bind(this);
     this.handleStop = this.handleStop.bind(this);
+    this.setBounding = this.setBounding.bind(this);
 
     this.state = {
       dragging: false
@@ -68,8 +69,17 @@ export default class Section extends Component {
   }
 
   componentDidMount() {
+    window.addEventListener('scroll', this.setBounding);
+    this.setBounding();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.setBounding);
+  }
+
+  setBounding() {
     const {setBounding, gridKey} = this.props; // eslint-disable-line react/prop-types
-    setBounding(+gridKey, this.refs.grid.getBoundingClientRect());
+    setBounding(+gridKey, this.refs.grid.parentNode.getBoundingClientRect());
   }
 
   render() {
@@ -95,7 +105,11 @@ export default class Section extends Component {
             <div>
               {children}
             </div>
-          ) : null
+          ) : (
+            <div style={{opacity: 0}}>
+              {children}
+            </div>
+          )
         }
         <Draggable
           defaultPosition={{x: 0, y: 0}}

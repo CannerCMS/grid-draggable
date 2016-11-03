@@ -40,7 +40,14 @@ export default class GridDraggable extends Component {
     const {clientX, clientY} = mouse;
     const pickRect = pickBy(
       this.bounding,
-      val => val.bound && val.bound.constructor.name === 'ClientRect'
+      val =>
+        val.bound &&
+        (
+          // chrome
+          val.bound.constructor.name === 'ClientRect' ||
+          // in firefox called DOMReact
+          val.bound.constructor.name === 'DOMRect'
+        )
     );
 
     const gridRectValues = Object.values(pickRect);

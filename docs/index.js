@@ -32,7 +32,7 @@ class Demo extends Component {
   }
 
   onDrag(e, data, match) {
-    console.log('drag: ', data, match);
+    // console.log('drag: ', data, match);
     if (match && match[0] !== data.node.parentNode) {
       this.match = match[0];
       match[0].style.backgroundColor = '#CCC';
