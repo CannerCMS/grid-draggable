@@ -92,7 +92,7 @@ export default class Section extends Component {
         style={{...style, position: 'relative'}}>
         {
           dragging ? (
-            <div style={{position: 'absolute'}}>
+            <div>
               {children}
             </div>
           ) : null
@@ -106,7 +106,7 @@ export default class Section extends Component {
           onDrag={this.handleDrag}
           onStop={this.handleStop}>
           <div
-            style={{position: 'absolute'}}
+            style={{position: 'absolute', top: 0, left: 0}}
             className={dragging ? dragClassName : null}>
             {children}
           </div>
