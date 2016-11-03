@@ -114,13 +114,12 @@ export default class Section extends Component {
         <Draggable
           defaultPosition={{x: 0, y: 0}}
           position={dragging ? null : {x: 0, y: 0}}
-          zIndex={100}
           handle={handle}
           onStart={this.handleStart}
           onDrag={this.handleDrag}
           onStop={this.handleStop}>
           <div
-            style={{position: 'absolute', top: 0, left: 0}}
+            style={{position: 'absolute', top: 0, left: 0, zIndex: 100}}
             className={dragging ? dragClassName : null}>
             {children}
           </div>
