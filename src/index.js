@@ -37,11 +37,10 @@ export default class GridDraggable extends Component {
 
   cloneChildren(props) {
     const that = this;
-    const childrenWithProps = Children.map(props.children,
+    const {children, ...rest} = props;
+    const childrenWithProps = Children.map(children,
       (child, i) => React.cloneElement(child, {
-        dragStart: props.dragStart,
-        onDrag: props.onDrag,
-        dragStop: props.dragStop,
+        ...rest,
         swapGrid: that.swapGrid,
         setBounding: that.setBounding,
         getMatchGrid: that.getMatchGrid,
