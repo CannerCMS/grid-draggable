@@ -1,6 +1,6 @@
 {
   "name": "grid-draggable",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "description": "grid draggable system",
   "homepage": "",
   "author": {
@@ -77,7 +77,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "grid-breakpoint": "^0.2.2",
+    "grid-breakpoint": "^0.3.1",
     "lodash": "^4.16.6",
     "react-draggable": "^2.2.2"
   }
