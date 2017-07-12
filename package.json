@@ -1,6 +1,6 @@
 {
   "name": "grid-draggable",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "grid draggable system",
   "homepage": "",
   "author": {
@@ -72,12 +72,12 @@
   ],
   "repository": "Canner/grid-draggable",
   "peerDependencies": {
-    "react": "^15.3.1",
+    "react": "^15.3.1", 
     "react-dom": "^15.3.1"
   },
   "license": "MIT",
   "dependencies": {
-    "grid-breakpoint": "^0.3.1",
+    "grid-breakpoint": "^1.0.0",
     "lodash": "^4.16.6",
     "react-draggable": "^2.2.2"
   }
