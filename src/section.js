@@ -1,5 +1,6 @@
 /* eslint-disable no-implicit-coercion */
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 const noop = arg => arg;
 
