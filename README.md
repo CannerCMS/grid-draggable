@@ -1,5 +1,5 @@
 # grid-draggable [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
-> grid draggable system
+> Draggable grid system
 
 ## Installation
 
@@ -73,7 +73,7 @@ ReactDOM.render(
 ## Start example server
 
 ```
-node devServer.js
+npm start
 ```
 
 ## License

@@ -1,7 +1,8 @@
 module.exports = {
   extends: [
     "google",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:flowtype/recommended"
   ],
   parser: "babel-eslint",
   parserOptions: {
@@ -14,13 +15,14 @@ module.exports = {
   env: {
     browser: true
   },
+  globals: {
+    DOMRect: true
+  },
   plugins: [
-    "react"
+    "react",
+    "flowtype"
   ],
-  settings: {
-    react: {
-      pragma: "React",  // Pragma to use, default to "React"
-      version: "15.3.1"
-    }
+  rules: {
+    "react/prop-types": 0
   }
 };

@@ -1,39 +1,38 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
-  devtool: 'eval-source-map',
-  entry: [
-    'webpack-hot-middleware/client',
-    './docs/index.js'
-  ],
+  entry: './docs/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/static/'
+    publicPath: '/docs/static/'
   },
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['.js']
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify("development")
-      }
-    })
-  ],
+  resolveLoader: {
+    moduleExtensions: ["-loader"]
+  },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loaders: ['babel'],
+        use: 'babel',
         exclude: path.resolve(__dirname, "node_modules")
       },
       {
         test: /\.css$/,
-        loader: 'style!css?modules',
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          }
+        ],
         include: /flexboxgrid/
       }
     ]

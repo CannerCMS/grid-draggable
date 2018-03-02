@@ -1,4 +1,4 @@
-/* eslint-disable no-implicit-coercion */
+/* eslint-disable */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';

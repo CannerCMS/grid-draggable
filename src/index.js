@@ -1,17 +1,30 @@
-import React, {Component, Children} from 'react';
-import PropTypes from 'prop-types';
+// @flow
+import * as React from 'react';
 import GridBreakpoint from 'grid-breakpoint';
-import {pickBy} from 'lodash';
+import pickBy from 'lodash.pickby';
+const {Component} = React;
 
-export default class GridDraggable extends Component {
-  constructor(props) {
+type DraggableProps = {
+  children: React.ChildrenArray<React.Element<*>>,
+  onSwap?: (string, string) => void,
+  dragStart: (any, any) => void,
+  onDrag: (any, any) => void,
+  dragStop: (any, any) => void
+}
+
+type DraggableState = {
+  children: Array<React.Element<*>>
+}
+
+export default class GridDraggable extends Component<DraggableProps, DraggableState> {
+  constructor(props: DraggableProps) {
     super(props);
-    this.swapGrid = this.swapGrid.bind(this);
-    this.setBounding = this.setBounding.bind(this);
-    this.matchGrid = this.matchGrid.bind(this);
-    this.getMatchGrid = this.getMatchGrid.bind(this);
-    this.cloneChildren = this.cloneChildren.bind(this);
-    this.bounding = {};
+    (this: any).swapGrid = this.swapGrid.bind(this);
+    (this: any).setBounding = this.setBounding.bind(this);
+    (this: any).matchGrid = this.matchGrid.bind(this);
+    (this: any).getMatchGrid = this.getMatchGrid.bind(this);
+    (this: any).cloneChildren = this.cloneChildren.bind(this);
+    (this: any).bounding = {};
 
     const childrenWithProps = this.cloneChildren(props);
 
@@ -20,15 +33,7 @@ export default class GridDraggable extends Component {
     };
   }
 
-  static propTypes = {
-    children: PropTypes.any,
-    onSwap: PropTypes.func,
-    dragStart: PropTypes.func,
-    onDrag: PropTypes.func,
-    dragStop: PropTypes.func
-  };
-
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: DraggableProps) {
     const childrenWithProps = this.cloneChildren(nextProps);
 
     this.setState({
@@ -36,9 +41,9 @@ export default class GridDraggable extends Component {
     });
   }
 
-  cloneChildren(props) {
+  cloneChildren(props: DraggableProps) {
     const that = this;
-    const childrenWithProps = Children.map(props.children,
+    const childrenWithProps = React.Children.map(props.children,
       (child, i) => React.cloneElement(child, {
         dragStart: props.dragStart,
         onDrag: props.onDrag,
@@ -130,7 +135,7 @@ export default class GridDraggable extends Component {
     }
   }
 
-  setBounding(key, bound) {
+  setBounding(key: string, bound: DOMRect) {
     this.bounding[`__bounding${key}`] = {
       key,
       bound

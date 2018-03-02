@@ -54,7 +54,7 @@ class Demo extends Component {
   render() {
     return (
       <div>
-        <h1>Try drag and drop the grids!</h1>
+        <h1>Try drag and drop the grids! GridDraggable</h1>
         <GridDraggable
           dragStart={this.dragStart}
           onDrag={this.onDrag}
