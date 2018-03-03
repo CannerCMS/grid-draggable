@@ -1,4 +1,6 @@
 # grid-draggable [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/Canner/grid-draggable.svg)](https://greenkeeper.io/)
 > grid draggable system
 
 ## Installation
