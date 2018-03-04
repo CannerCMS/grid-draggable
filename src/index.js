@@ -6,7 +6,7 @@ const {Component} = React;
 
 type DraggableProps = {
   children: React.ChildrenArray<React.Element<*>>,
-  onSwap?: (string, string) => void,
+  onSwap?: (number, number) => void,
   dragStart: (any, any) => void,
   onDrag: (any, any) => void,
   dragStop: (any, any) => void
@@ -14,6 +14,16 @@ type DraggableProps = {
 
 type DraggableState = {
   children: Array<React.Element<*>>
+}
+
+type BoundKey = {
+  key: string,
+  bound: DOMRect
+}
+
+type Mouse = {
+  clientX: number,
+  clientY: number
 }
 
 export default class GridDraggable extends Component<DraggableProps, DraggableState> {
@@ -31,6 +41,10 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     this.state = {
       children: childrenWithProps
     };
+  }
+
+  bounding: {  // eslint-disable-line
+    [string]: BoundKey
   }
 
   componentWillReceiveProps(nextProps: DraggableProps) {
@@ -58,9 +72,11 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     return childrenWithProps;
   }
 
-  matchGrid(mouse) {
+  matchGrid(mouse: Mouse): Array<BoundKey> {
     const {clientX, clientY} = mouse;
-    const pickRect = pickBy(
+    const pickRect: {
+      [string]: BoundKey
+    } = pickBy(
       this.bounding,
       val =>
         val.bound &&
@@ -72,14 +88,16 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
         )
     );
 
-    const gridRectValues = Object.values(pickRect);
+    const gridRectValues = Object.keys(pickRect).map(key => pickRect[key]);
     const filterGrid = gridRectValues.filter(val => {
-      const {left, top, width, height} = val.bound;
-      if (
-        clientX >= left && clientX <= (left + width) &&
-        clientY >= top && clientY <= (top + height)
-      ) {
-        return true;
+      if (val && val.bound) {
+        const {left, top, width, height} = val.bound;
+        if (
+          clientX >= left && clientX <= (left + width) &&
+          clientY >= top && clientY <= (top + height)
+        ) {
+          return true;
+        }
       }
 
       return false;
@@ -88,7 +106,7 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     return filterGrid;
   }
 
-  getMatchGrid(mouse) {
+  getMatchGrid(mouse: Mouse) {
     const filterGrid = this.matchGrid(mouse);
     const allGridEle = Array.prototype.slice.call(
                           document.querySelectorAll('[data-grid-key]'));
@@ -107,7 +125,7 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     return null;
   }
 
-  swapGrid(mouse, fromKey) {
+  swapGrid(mouse: Mouse, fromKey: string) {
     const {onSwap} = this.props;
     const {children} = this.state;
     const filterGrid = this.matchGrid(mouse);
@@ -126,7 +144,9 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
         newChildren[fromIndex] = newChildren[toIndex];
         newChildren[toIndex] = tmp;
 
-        onSwap(fromIndex, toIndex);
+        if (onSwap) {
+          onSwap(fromIndex, toIndex);
+        }
       }
 
       this.setState({
