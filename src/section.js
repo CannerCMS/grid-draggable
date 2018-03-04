@@ -1,33 +1,55 @@
-/* eslint-disable */
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+// @flow
+import * as React from 'react';
 import Draggable from 'react-draggable';
-const noop = arg => arg;
+import type {Mouse} from './types';
+const noop = (arg: any) => (arg: any); // eslint-disable-line
 
-export default class Section extends Component {
-  constructor(props) {
+type SectionProps = {
+  children: React.ChildrenArray<React.Element<*>>,
+  setBounding: (key: string, bound: DOMRect) => void,
+  getMatchGrid: (mouse: Mouse) => void,
+  dragStart: (MouseEvent, ReactDraggableCallbackData) => void,
+  onDrag: (MouseEvent, ReactDraggableCallbackData, ?Array<HTMLDivElement>) => void,
+  dragStop: (MouseEvent, ReactDraggableCallbackData) => void,
+  swapGrid: (mouse: Mouse, fromKey: number) => void,
+  className: string,
+  gridKey: string,
+  style: {[string]: any},
+  dragClassName: string,
+  handle: string
+}
+
+type SectionState = {
+  dragging: boolean,
+  fromKey: ?string,
+  e: ?MouseEvent
+}
+
+type ReactDraggableCallbackData = {
+  node: HTMLElement,
+  x: number,
+  y: number,
+  deltaX: number,
+  deltaY: number,
+  lastX: number,
+  lastY: number
+};
+
+export default class Section extends React.Component<SectionProps, SectionState> {
+  constructor(props: SectionProps) {
     super(props);
 
-    this.handleStart = this.handleStart.bind(this);
-    this.handleDrag = this.handleDrag.bind(this);
-    this.handleStop = this.handleStop.bind(this);
-    this.setBounding = this.setBounding.bind(this);
+    (this: any).handleStart = this.handleStart.bind(this);
+    (this: any).handleDrag = this.handleDrag.bind(this);
+    (this: any).handleStop = this.handleStop.bind(this);
+    (this: any).setBounding = this.setBounding.bind(this);
 
     this.state = {
-      dragging: false
+      dragging: false,
+      fromKey: null,
+      e: null
     };
   }
-
-  static propTypes = {
-    children: PropTypes.any,
-    dragStart: PropTypes.func,
-    onDrag: PropTypes.func,
-    dragStop: PropTypes.func,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    dragClassName: PropTypes.string,
-    handle: PropTypes.string
-  };
 
   static defaultProps = {
     dragStart: noop,
@@ -35,23 +57,24 @@ export default class Section extends Component {
     dragStop: noop
   };
 
-  handleStart(e, data) {
+  handleStart(e: MouseEvent, data: ReactDraggableCallbackData) {
     this.setState({dragging: true});
     this.props.dragStart(e, data);
   }
 
-  handleDrag(e, data) {
+  handleDrag(e: MouseEvent, data: ReactDraggableCallbackData) {
     const {onDrag, getMatchGrid} = this.props; // eslint-disable-line react/prop-types
     const match = getMatchGrid({clientX: e.clientX, clientY: e.clientY});
     onDrag(e, data, match);
   }
 
-  handleStop(e, data) {
+  handleStop(e: MouseEvent, data: ReactDraggableCallbackData) {
     const {dragStop} = this.props; // eslint-disable-line react/prop-types
     dragStop(e, data);
 
     // swap when stop!
-    const grandParentNode = data.node.parentNode.parentNode;
+    // $FlowFixMe
+    const grandParentNode = ((data.node.parentNode: HTMLElement).parentNode: HTMLElement);
     const fromKey = grandParentNode.children[0].getAttribute('data-grid-key');
     this.setState({
       dragging: false,
@@ -62,10 +85,10 @@ export default class Section extends Component {
     return false;
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: SectionProps, prevState: SectionState) {
     const {e, fromKey, dragging} = this.state;
-    if (prevState.dragging && !dragging) {
-      this.props.swapGrid({clientX: e.clientX, clientY: e.clientY}, +fromKey);  // eslint-disable-line react/prop-types
+    if (prevState.dragging && !dragging && fromKey && e) {
+      this.props.swapGrid({clientX: e.clientX, clientY: e.clientY}, +fromKey);
     }
   }
 
@@ -80,7 +103,7 @@ export default class Section extends Component {
 
   setBounding() {
     const {setBounding, gridKey} = this.props; // eslint-disable-line react/prop-types
-    setBounding(+gridKey, this.refs.grid.parentNode.getBoundingClientRect());
+    setBounding(gridKey, this.refs.grid.parentNode.getBoundingClientRect());
   }
 
   render() {

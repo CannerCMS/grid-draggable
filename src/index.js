@@ -2,6 +2,7 @@
 import * as React from 'react';
 import GridBreakpoint from 'grid-breakpoint';
 import pickBy from 'lodash.pickby';
+import type {Mouse} from './types';
 const {Component} = React;
 
 type DraggableProps = {
@@ -19,11 +20,6 @@ type DraggableState = {
 type BoundKey = {
   key: string,
   bound: DOMRect
-}
-
-type Mouse = {
-  clientX: number,
-  clientY: number
 }
 
 export default class GridDraggable extends Component<DraggableProps, DraggableState> {
@@ -106,9 +102,9 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     return filterGrid;
   }
 
-  getMatchGrid(mouse: Mouse) {
+  getMatchGrid(mouse: Mouse): ?Array<HTMLDivElement> {
     const filterGrid = this.matchGrid(mouse);
-    const allGridEle = Array.prototype.slice.call(
+    const allGridEle: Array<HTMLDivElement> = Array.prototype.slice.call(
                           document.querySelectorAll('[data-grid-key]'));
 
     if (filterGrid.length) {
@@ -118,14 +114,13 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
           return +node.getAttribute('data-grid-key') === key; // eslint-disable-line no-implicit-coercion
         });
       });
-
       return matchNode[0];
     }
 
     return null;
   }
 
-  swapGrid(mouse: Mouse, fromKey: string) {
+  swapGrid(mouse: Mouse, fromKey: number) {
     const {onSwap} = this.props;
     const {children} = this.state;
     const filterGrid = this.matchGrid(mouse);
