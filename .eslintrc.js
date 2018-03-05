@@ -1,19 +1,13 @@
 module.exports = {
   extends: [
-    "google",
+    "eslint:recommended",
     "plugin:react/recommended",
     "plugin:flowtype/recommended"
   ],
   parser: "babel-eslint",
   env: {
-    browser: true
-  },
-  globals: {
-    DOMRect: true,
-    ReactDraggableCallbackData: true,
-    defaultProps: true,
-    bounding: true,
-    container: true
+    browser: true,
+    node: true
   },
   plugins: [
     "react",
