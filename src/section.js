@@ -1,17 +1,17 @@
 // @flow
 import * as React from 'react';
 import Draggable from 'react-draggable';
-import type {Mouse} from './types';
+import type {ReactDraggableCallbackData} from './types';
 const noop = (arg: any) => (arg: any); // eslint-disable-line
 
 type SectionProps = {
   children: React.ChildrenArray<React.Element<*>>,
   setBounding: (key: string, bound: DOMRect) => void,
-  getMatchGrid: (mouse: Mouse) => void,
   dragStart: (MouseEvent, ReactDraggableCallbackData) => void,
-  onDrag: (MouseEvent, ReactDraggableCallbackData, ?Array<HTMLDivElement>) => void,
+  getMatchGrid: (data: ReactDraggableCallbackData) => void,
+  onDrag: (MouseEvent, ReactDraggableCallbackData, ?Node) => void,
   dragStop: (MouseEvent, ReactDraggableCallbackData) => void,
-  swapGrid: (mouse: Mouse, fromKey: number) => void,
+  swapGrid: (data: ReactDraggableCallbackData, fromKey: number) => void,
   className: string,
   gridKey: string,
   style: {[string]: any},
@@ -22,18 +22,8 @@ type SectionProps = {
 type SectionState = {
   dragging: boolean,
   fromKey: ?string,
-  e: ?MouseEvent
+  data: ?ReactDraggableCallbackData
 }
-
-type ReactDraggableCallbackData = {
-  node: HTMLElement,
-  x: number,
-  y: number,
-  deltaX: number,
-  deltaY: number,
-  lastX: number,
-  lastY: number
-};
 
 export default class Section extends React.Component<SectionProps, SectionState> {
   constructor(props: SectionProps) {
@@ -47,7 +37,7 @@ export default class Section extends React.Component<SectionProps, SectionState>
     this.state = {
       dragging: false,
       fromKey: null,
-      e: null
+      data: null
     };
   }
 
@@ -63,13 +53,13 @@ export default class Section extends React.Component<SectionProps, SectionState>
   }
 
   handleDrag(e: MouseEvent, data: ReactDraggableCallbackData) {
-    const {onDrag, getMatchGrid} = this.props; // eslint-disable-line react/prop-types
-    const match = getMatchGrid({clientX: e.clientX, clientY: e.clientY});
+    const {onDrag, getMatchGrid} = this.props;
+    const match = getMatchGrid(data);
     onDrag(e, data, match);
   }
 
   handleStop(e: MouseEvent, data: ReactDraggableCallbackData) {
-    const {dragStop} = this.props; // eslint-disable-line react/prop-types
+    const {dragStop} = this.props;
     dragStop(e, data);
 
     // swap when stop!
@@ -79,37 +69,39 @@ export default class Section extends React.Component<SectionProps, SectionState>
     this.setState({
       dragging: false,
       fromKey,
-      e
+      data
     });
 
     return false;
   }
 
   componentDidUpdate(prevProps: SectionProps, prevState: SectionState) {
-    const {e, fromKey, dragging} = this.state;
-    if (prevState.dragging && !dragging && fromKey && e) {
-      this.props.swapGrid({clientX: e.clientX, clientY: e.clientY}, +fromKey);
+    const {data, fromKey, dragging} = this.state;
+    if (prevState.dragging && !dragging && fromKey && data) {
+      this.props.swapGrid(data, +fromKey);
     }
   }
 
   componentDidMount() {
     window.addEventListener('scroll', this.setBounding);
+    window.addEventListener('resize', this.setBounding);
     this.setBounding();
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.setBounding);
+    window.removeEventListener('resize', this.setBounding);
   }
 
   setBounding() {
-    const {setBounding, gridKey} = this.props; // eslint-disable-line react/prop-types
+    const {setBounding, gridKey} = this.props;
     setBounding(gridKey, this.refs.grid.parentNode.getBoundingClientRect());
   }
 
   render() {
     const {
       children,
-      gridKey, // eslint-disable-line react/prop-types
+      gridKey,
       className,
       style,
       dragClassName,

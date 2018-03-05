@@ -10,8 +10,10 @@ module.exports = {
   },
   globals: {
     DOMRect: true,
-    Mouse: true,
-    defaultProps: true
+    ReactDraggableCallbackData: true,
+    defaultProps: true,
+    bounding: true,
+    container: true
   },
   plugins: [
     "react",

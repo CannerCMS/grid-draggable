@@ -2,15 +2,15 @@
 import * as React from 'react';
 import GridBreakpoint from 'grid-breakpoint';
 import pickBy from 'lodash.pickby';
-import type {Mouse} from './types';
+import type {ReactDraggableCallbackData} from './types';
 const {Component} = React;
 
 type DraggableProps = {
   children: React.ChildrenArray<React.Element<*>>,
   onSwap?: (number, number) => void,
-  dragStart: (any, any) => void,
-  onDrag: (any, any) => void,
-  dragStop: (any, any) => void
+  dragStart: (MouseEvent, ReactDraggableCallbackData) => void,
+  onDrag: (MouseEvent, ReactDraggableCallbackData, ?Node) => void,
+  dragStop: (MouseEvent, ReactDraggableCallbackData) => void
 }
 
 type DraggableState = {
@@ -39,7 +39,9 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     };
   }
 
-  bounding: {  // eslint-disable-line
+  container: ?HTMLDivElement
+
+  bounding: {
     [string]: BoundKey
   }
 
@@ -68,42 +70,65 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     return childrenWithProps;
   }
 
-  matchGrid(mouse: Mouse): Array<BoundKey> {
-    const {clientX, clientY} = mouse;
-    const pickRect: {
-      [string]: BoundKey
-    } = pickBy(
-      this.bounding,
-      val =>
-        val.bound &&
-        (
-          // chrome
-          val.bound.constructor.name === 'ClientRect' ||
-          // in firefox called DOMReact
-          val.bound.constructor.name === 'DOMRect'
-        )
-    );
+  matchGrid(data: ReactDraggableCallbackData): Array<BoundKey> {
+    if (this.container) {
+      const {x, y} = data;
+      const pickRect: {
+        [string]: BoundKey
+      } = pickBy(
+        this.bounding,
+        val =>
+          val.bound &&
+          (
+            // chrome
+            val.bound.constructor.name === 'ClientRect' ||
+            // in firefox called DOMReact
+            val.bound.constructor.name === 'DOMRect'
+          )
+      );
 
-    const gridRectValues = Object.keys(pickRect).map(key => pickRect[key]);
-    const filterGrid = gridRectValues.filter(val => {
-      if (val && val.bound) {
-        const {left, top, width, height} = val.bound;
-        if (
-          clientX >= left && clientX <= (left + width) &&
-          clientY >= top && clientY <= (top + height)
-        ) {
-          return true;
+      // $FlowFixMe
+      const containerBound = this.container.getBoundingClientRect();
+      const {
+        left: containerBoundLeft,
+        top: containerBoundTop
+      } = containerBound;
+
+      // $FlowFixMe
+      const currentNodeBounding = data.node.parentNode.getBoundingClientRect();
+      const gridRectValues = Object.keys(pickRect).map(key => pickRect[key]);
+      const filterGrid = gridRectValues.filter(val => {
+        if (val && val.bound) {
+          // get each grid's bounding
+          const {left, top, width, height} = val.bound;
+
+          // calculate grid position that relative to container
+          const relativeTop = top - containerBoundTop;
+          const relativeLeft = left - containerBoundLeft;
+          const currentRelativeTop = currentNodeBounding.top - containerBoundTop;
+          const currentRelativeLeft = currentNodeBounding.left - containerBoundLeft;
+          const newPositionX = currentRelativeLeft + x;
+          const newPositionY = currentRelativeTop + y;
+
+          if (
+            newPositionX >= relativeLeft && newPositionX <= (relativeLeft + width) &&
+            newPositionY >= relativeTop && newPositionY <= (relativeTop + height)
+          ) {
+            return true;
+          }
         }
-      }
 
-      return false;
-    });
+        return false;
+      });
 
-    return filterGrid;
+      return filterGrid;
+    }
+
+    return [];
   }
 
-  getMatchGrid(mouse: Mouse): ?Array<HTMLDivElement> {
-    const filterGrid = this.matchGrid(mouse);
+  getMatchGrid(data: ReactDraggableCallbackData): ?Array<HTMLDivElement> {
+    const filterGrid = this.matchGrid(data);
     const allGridEle: Array<HTMLDivElement> = Array.prototype.slice.call(
                           document.querySelectorAll('[data-grid-key]'));
 
@@ -120,10 +145,10 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     return null;
   }
 
-  swapGrid(mouse: Mouse, fromKey: number) {
+  swapGrid(data: ReactDraggableCallbackData, fromKey: number) {
     const {onSwap} = this.props;
     const {children} = this.state;
-    const filterGrid = this.matchGrid(mouse);
+    const filterGrid = this.matchGrid(data);
 
     if (filterGrid.length > 0) {
       // create new array for children.
@@ -161,7 +186,10 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     const {children, dragStart, onDrag, dragStop, ...rest} = this.props; // eslint-disable-line
     const modifiedChildren = this.state.children;
     return (
-      <div>
+      <div
+        ref={parent => {
+          this.container = parent;
+        }}>
         <GridBreakpoint {...rest}>
           {modifiedChildren}
         </GridBreakpoint>
