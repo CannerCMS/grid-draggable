@@ -3,8 +3,5 @@
     "react",
     "flow",
     "stage-0"
-  ],
-  "plugins": [
-    "transform-flow-strip-types"
   ]
 }
