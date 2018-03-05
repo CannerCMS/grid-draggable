@@ -1,10 +1,13 @@
 const path = require('path');
 
 module.exports = {
-  entry: './docs/index.js',
+  entry: {
+    index: './docs/index.js',
+    modal: './docs/modal.js'
+  },
   output: {
     path: path.join(__dirname, 'docs/static'),
-    filename: 'bundle.js',
+    filename: '[name].js',
     libraryTarget: 'var'
   },
   externals: {
@@ -37,7 +40,23 @@ module.exports = {
             }
           }
         ],
-        include: /flexboxgrid/
+        include: [
+          /flexboxgrid/
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          }
+        ],
+        include: [
+          /antd/
+        ]
       }
     ]
   }
