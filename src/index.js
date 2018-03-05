@@ -8,9 +8,9 @@ const {Component} = React;
 type DraggableProps = {
   children: React.ChildrenArray<React.Element<*>>,
   onSwap?: (number, number) => void,
-  dragStart: (MouseEvent, ReactDraggableCallbackData) => void,
-  onDrag: (MouseEvent, ReactDraggableCallbackData, ?Node) => void,
-  dragStop: (MouseEvent, ReactDraggableCallbackData) => void
+  dragStart?: (MouseEvent, ReactDraggableCallbackData) => void,
+  onDrag?: (MouseEvent, ReactDraggableCallbackData, ?Node) => void,
+  dragStop?: (MouseEvent, ReactDraggableCallbackData) => void
 }
 
 type DraggableState = {
