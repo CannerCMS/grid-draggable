@@ -17,10 +17,11 @@
     "draggable"
   ],
   "devDependencies": {
+    "antd": "^3.2.3",
     "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
-    "babel-eslint": "^8.2.2",
-    "babel-loader": "^7.1.3",
+    "babel-eslint": "6.1.2",
+    "babel-loader": "6.2.3",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",

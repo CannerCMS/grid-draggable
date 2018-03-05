@@ -14,7 +14,8 @@ type DraggableProps = {
 }
 
 type DraggableState = {
-  children: Array<React.Element<*>>
+  children: Array<React.Element<*>>,
+  ready: boolean
 }
 
 type BoundKey = {
@@ -32,10 +33,9 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     (this: any).cloneChildren = this.cloneChildren.bind(this);
     (this: any).bounding = {};
 
-    const childrenWithProps = this.cloneChildren(props);
-
     this.state = {
-      children: childrenWithProps
+      children: [],
+      ready: false
     };
   }
 
@@ -59,6 +59,7 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
       (child, i) => React.cloneElement(child, {
         dragStart: props.dragStart,
         onDrag: props.onDrag,
+        container: this.container,
         dragStop: props.dragStop,
         swapGrid: that.swapGrid,
         setBounding: that.setBounding,
@@ -68,6 +69,14 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     );
 
     return childrenWithProps;
+  }
+
+  componentDidMount() {
+    const childrenWithProps = this.cloneChildren(this.props);
+    this.setState({
+      children: childrenWithProps,
+      ready: true
+    });
   }
 
   matchGrid(data: ReactDraggableCallbackData): Array<BoundKey> {

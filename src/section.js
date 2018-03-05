@@ -12,6 +12,7 @@ type SectionProps = {
   onDrag: (MouseEvent, ReactDraggableCallbackData, ?Node) => void,
   dragStop: (MouseEvent, ReactDraggableCallbackData) => void,
   swapGrid: (data: ReactDraggableCallbackData, fromKey: number) => void,
+  container: HTMLDivElement,
   className: string,
   gridKey: string,
   style: {[string]: any},
@@ -83,13 +84,15 @@ export default class Section extends React.Component<SectionProps, SectionState>
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.setBounding);
+    const {container} = this.props;
+    container.addEventListener('mousedown', this.setBounding);
     window.addEventListener('resize', this.setBounding);
     this.setBounding();
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.setBounding);
+    const {container} = this.props;
+    container.removeEventListener('mousedown', this.setBounding);
     window.removeEventListener('resize', this.setBounding);
   }
 
