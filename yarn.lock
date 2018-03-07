@@ -3496,9 +3496,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
-grid-breakpoint@1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/grid-breakpoint/-/grid-breakpoint-1.4.0.tgz#4a84e2159141efc0801714780a9739ee50f2dd43"
+grid-breakpoint@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/grid-breakpoint/-/grid-breakpoint-1.5.0.tgz#240c0018744980fe9382bafe76780a38d1a0cd64"
   dependencies:
     classnames "^2.2.5"
     lodash.chunk "^4.2.0"

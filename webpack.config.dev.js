@@ -30,28 +30,8 @@ module.exports = {
             loader: 'style-loader'
           },
           {
-            loader: 'css-loader',
-            options: {
-              modules: true
-            }
-          }
-        ],
-        include: [
-          /flexboxgrid/
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
             loader: 'css-loader'
           }
-        ],
-        include: [
-          /antd/
         ]
       }
     ]
