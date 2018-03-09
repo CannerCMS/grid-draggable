@@ -118,10 +118,11 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
           const currentRelativeLeft = currentNodeBounding.left - containerBoundLeft;
           const newPositionX = currentRelativeLeft + x;
           const newPositionY = currentRelativeTop + y;
-
           if (
-            newPositionX >= relativeLeft && newPositionX <= (relativeLeft + width) &&
-            newPositionY >= relativeTop && newPositionY <= (relativeTop + height)
+            (newPositionX >= relativeLeft && newPositionX <= (relativeLeft + width) &&
+            newPositionY >= relativeTop && newPositionY <= (relativeTop + height))
+            || ((newPositionX + currentNodeBounding.width) <= (relativeLeft + width) && (newPositionX + currentNodeBounding.width) >= relativeLeft &&
+            (newPositionY  + currentNodeBounding.height) <= (relativeTop + height) && (newPositionY + currentNodeBounding.height) >= relativeTop)
           ) {
             return true;
           }
@@ -148,7 +149,7 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
           return +node.getAttribute('data-grid-key') === key; // eslint-disable-line no-implicit-coercion
         });
       });
-      return matchNode[0];
+      return matchNode[matchNode.length - 1];
     }
 
     return null;

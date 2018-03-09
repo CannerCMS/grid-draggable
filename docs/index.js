@@ -8,10 +8,10 @@ const list = range(20).map((col, i) => {
   return (
     <Section
       key={i}
-      style={{width: '100%', height: '100px'}}
+      style={{width: '100%', height: '100%', backgroundColor: 'red'}}
       handle=".handle"
       dragClassName="dragging">
-      <div style={{width: '100%', height: '100px', backgroundColor: 'red'}} key={i}>
+      <div>
         {col}
         <button className="handle">Click me to drag</button>
       </div>
@@ -34,12 +34,7 @@ class Demo extends Component {
   }
 
   onDrag(e, data, match) {
-    if (match && match[0] !== data.node.parentNode) {
-      match[0].style.backgroundColor = '#CCC';
-    } else if (match) {
-      match.style.backgroundColor = null;
-      match = null;
-    }
+    console.log(match)
   }
 
   dragStop(e, data) {
