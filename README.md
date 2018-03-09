@@ -70,6 +70,96 @@ ReactDOM.render(
 
 ```
 
+## API
+
+### <GridDraggable/>
+
+`<GridDraggable/>` is a element that wraps all draggable sections. The children pass in this component **must** be `<Section/>`.
+
+Like below:
+
+```js
+<GridDraggable {...props}>
+  <Section/>
+  <Section/>
+  <Section/>
+</GridDraggable>
+```
+
+**Props**:
+
+| Name         | Type    | Default | Description |
+| ------------ | ------- | ------- | ----------- |
+| onSwap | (number, number) => void | undefined | When grid is swapping, this function will be called |
+| dragStart | (MouseEvent, ReactDraggableCallbackData) => void | undefined | When grid is start dragging, this function will be called |
+| onDrag | (MouseEvent, ReactDraggableCallbackData, ?MatchNode) => void | undefined | When grid is draggind, this function will be called |
+| dragStop | (MouseEvent, ReactDraggableCallbackData) => void | undefined | When grid is stop dragging, this function will be called  |
+
+Other props will directly pass to `grid-breakpoint` such as `lg`, `md`, `sm`, `sx` ... please reference to https://github.com/Canner/grid-breakpoint
+
+### <Section/>
+
+`<Section/>` is used to create a draggable section that adds draggability to its children. 
+
+**Props**
+
+| Name         | Type    | Default | Description |
+| ------------ | ------- | ------- | ----------- |
+| className | string | undefined | set className to the section |
+| style | {[string]: any} | undefined | css styles |
+| dragClassName | string | undefined | When dragging the grid, it will clone a element and apply css classname `dragClassName` to this element. |
+| handle | string | undefined | set your handler using css selector, pass string such as `.handle`  |
+
+The child of `<Section/>` could **either be a function or react component**. The first parameter will pass `dragging`, and `match`, that allow you the ability to decide what component you would like to render when events like dragging or matched happened.
+
+There's an example:
+
+```js
+<Section
+  key={i}
+  style={{width: '100%', height: '100%'}}
+  handle=".handle" // set handler
+  dragClassName="dragging">
+  {({dragging, match}) => {
+    if (match) return ( // when match return <div/>
+      <div style={{color: 'red'}}>This is a match</div>
+    );
+
+    // create a react-motion animation, when dragging using animations.
+    const motionStyle = dragging
+    ? {
+        scale: spring(1.1, springConfig),
+        shadow: spring(16, springConfig)
+      }
+    : {
+        scale: spring(1, springConfig),
+        shadow: spring(1, springConfig)
+      };
+
+    return (
+      <Motion style={motionStyle}>
+        {({scale, shadow}) => (
+            <div
+              style={{
+                boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${2 * shadow}px 0px`,
+                transform: `translate3d(0, 0, 0) scale(${scale})`,
+                WebkitTransform: `translate3d(0, 0, 0) scale(${scale})`,
+              }}>
+              <div>
+                {col}
+                <button className="handle">Click me to drag</button>
+              </div>
+            </div>
+          )
+        }
+      </Motion>
+    );
+  }}
+</Section>
+```
+
+
+
 ## Start example server
 
 ```

@@ -6,7 +6,7 @@ const noop = (arg: any) => (arg: any); // eslint-disable-line
 
 type SectionProps = {
   children: React.ChildrenArray<React.Element<*>>,
-  setBounding: (key: string, bound: DOMRect) => void,
+  setBounding: (key: string, bound: DOMRect, ref: Section) => void,
   dragStart: (MouseEvent, ReactDraggableCallbackData) => void,
   getMatchGrid: (data: ReactDraggableCallbackData) => void,
   onDrag: (MouseEvent, ReactDraggableCallbackData, ?Node) => void,
@@ -105,7 +105,10 @@ export default class Section extends React.Component<SectionProps, SectionState>
   }
 
   match = () => {
-    this.setState({match: true});
+    // if not dragging, set match to true
+    if (!this.state.dragging) {
+      this.setState({match: true});
+    }
   }
 
   unmatch = () => {

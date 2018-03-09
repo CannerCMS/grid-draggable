@@ -10,8 +10,13 @@ type DraggableProps = {
   children: React.ChildrenArray<React.Element<*>>,
   onSwap?: (number, number) => void,
   dragStart?: (MouseEvent, ReactDraggableCallbackData) => void,
-  onDrag?: (MouseEvent, ReactDraggableCallbackData, ?Node) => void,
+  onDrag?: (MouseEvent, ReactDraggableCallbackData, ?MatchNode) => void,
   dragStop?: (MouseEvent, ReactDraggableCallbackData) => void
+}
+
+type MatchNode = ?{
+  node: Array<HTMLDivElement>,
+  ReactElement: React.Element<*>
 }
 
 type DraggableState = {
@@ -59,16 +64,21 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
   cloneChildren(props: DraggableProps) {
     const that = this;
     const childrenWithProps = React.Children.map(props.children,
-      (child, i) => React.cloneElement(child, {
-        dragStart: props.dragStart,
-        onDrag: props.onDrag,
-        container: this.container,
-        dragStop: props.dragStop,
-        swapGrid: that.swapGrid,
-        setBounding: that.setBounding,
-        getMatchGrid: that.getMatchGrid,
-        gridKey: i
-      })
+      (child, i) => {
+        if (!child.type.name || child.type.name !== 'Section') {
+          throw new Error('All children in <GridDraggable/> must be <Section/>')
+        }
+        return React.cloneElement(child, {
+          dragStart: props.dragStart,
+          onDrag: props.onDrag,
+          container: this.container,
+          dragStop: props.dragStop,
+          swapGrid: that.swapGrid,
+          setBounding: that.setBounding,
+          getMatchGrid: that.getMatchGrid,
+          gridKey: i
+        })
+      }
     );
 
     return childrenWithProps;
@@ -140,7 +150,7 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     return [];
   }
 
-  getMatchGrid(data: ReactDraggableCallbackData): (?{node: Array<HTMLDivElement>, ReactElement: React.Element<*>}) {
+  getMatchGrid(data: ReactDraggableCallbackData): MatchNode {
     const filterGrid = this.matchGrid(data);
     const allGridEle: Array<HTMLDivElement> = Array.prototype.slice.call(
                           document.querySelectorAll('[data-grid-key]'));

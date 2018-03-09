@@ -16,7 +16,11 @@ const list = range(20).map((col, i) => {
       handle=".handle"
       dragClassName="dragging">
       {({dragging, match}) => {
-        const motionStyle = dragging || match
+        if (match) return (
+          <div style={{color: 'red'}}>This is a match</div>
+        );
+
+        const motionStyle = dragging
         ? {
             scale: spring(1.1, springConfig),
             shadow: spring(16, springConfig)
