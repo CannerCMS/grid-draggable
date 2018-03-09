@@ -63,6 +63,7 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
 
   cloneChildren(props: DraggableProps) {
     const that = this;
+
     const childrenWithProps = React.Children.map(props.children,
       (child, i) => {
         return React.cloneElement(child, {
@@ -224,6 +225,11 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
       bound,
       ref
     };
+
+    if (this.prevBoundingKey !== undefined && this.prevBoundingKey !== null) {
+      this.bounding[`__bounding${this.prevBoundingKey}`].ref.unmatch();
+      this.prevBoundingKey = undefined;
+    }
   }
 
   render() {

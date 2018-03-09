@@ -64,6 +64,9 @@ export default class Section extends React.Component<SectionProps, SectionState>
 
   handleStop(e: MouseEvent, data: ReactDraggableCallbackData) {
     const {dragStop} = this.props;
+
+    // reset bounding
+    this.setBounding();
     dragStop(e, data);
 
     // swap when stop!
