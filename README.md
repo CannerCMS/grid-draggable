@@ -110,7 +110,7 @@ Other props will directly pass to `grid-breakpoint` such as `lg`, `md`, `sm`, `s
 | dragClassName | string | undefined | When dragging the grid, it will clone a element and apply css classname `dragClassName` to this element. |
 | handle | string | undefined | set your handler using css selector, pass string such as `.handle`  |
 
-The child of `<Section/>` could **either be a function or react component**. The first parameter will pass `dragging`, and `match`, that allow you the ability to decide what component you would like to render when events like dragging or matched happened.
+The child of `<Section/>` could **either be a function or react component**. The first parameter will pass `dragging`, and `match`, that allow you the ability to decide what component you would like to render when events like dragging and matched happened.
 
 There's an example:
 
