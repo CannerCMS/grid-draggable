@@ -22,9 +22,11 @@ type SectionProps = {
 
 type SectionState = {
   dragging: boolean,
+  match: boolean,
   fromKey: ?string,
   data: ?ReactDraggableCallbackData
 }
+
 
 export default class Section extends React.Component<SectionProps, SectionState> {
   constructor(props: SectionProps) {
@@ -37,6 +39,7 @@ export default class Section extends React.Component<SectionProps, SectionState>
 
     this.state = {
       dragging: false,
+      match: false,
       fromKey: null,
       data: null
     };
@@ -98,7 +101,15 @@ export default class Section extends React.Component<SectionProps, SectionState>
 
   setBounding() {
     const {setBounding, gridKey} = this.props;
-    setBounding(gridKey, this.refs.grid.parentNode.getBoundingClientRect());
+    setBounding(gridKey, this.refs.grid.parentNode.getBoundingClientRect(), this);
+  }
+
+  match = () => {
+    this.setState({match: true});
+  }
+
+  unmatch = () => {
+    this.setState({match: false});
   }
 
   render() {
@@ -110,7 +121,14 @@ export default class Section extends React.Component<SectionProps, SectionState>
       dragClassName,
       handle
     } = this.props;
+    
+    let wrappedChildren = children;
     const {dragging} = this.state;
+
+    if (typeof children === 'function') {
+      const renderedChildren = children(this.state)
+      wrappedChildren = renderedChildren && React.Children.only(renderedChildren)
+    }
 
     return (
       <div
@@ -119,17 +137,7 @@ export default class Section extends React.Component<SectionProps, SectionState>
         data-grid-key={gridKey}
         className={className}
         style={{...style, position: 'relative'}}>
-        {
-          dragging ? (
-            <div>
-              {children}
-            </div>
-          ) : (
-            <div style={{opacity: 0}}>
-              {children}
-            </div>
-          )
-        }
+        {dragging && wrappedChildren}
         <Draggable
           defaultPosition={{x: 0, y: 0}}
           position={dragging ? null : {x: 0, y: 0}}
@@ -145,7 +153,7 @@ export default class Section extends React.Component<SectionProps, SectionState>
               zIndex: dragging ? 200 : 100
             }}
             className={dragging ? dragClassName : null}>
-            {children}
+            {wrappedChildren}
           </div>
         </Draggable>
       </div>

@@ -1,20 +1,50 @@
 /* eslint-disable no-console */
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import {Motion, spring} from 'react-motion';
+
 import GridDraggable, {Section} from '../src';
 import {range} from 'lodash';
+
+const springConfig = {stiffness: 300, damping: 50};
 
 const list = range(20).map((col, i) => {
   return (
     <Section
       key={i}
-      style={{width: '100%', height: '100%', backgroundColor: 'red'}}
+      style={{width: '100%', height: '100%'}}
       handle=".handle"
       dragClassName="dragging">
-      <div>
-        {col}
-        <button className="handle">Click me to drag</button>
-      </div>
+      {({dragging, match}) => {
+        const motionStyle = dragging || match
+        ? {
+            scale: spring(1.1, springConfig),
+            shadow: spring(16, springConfig)
+          }
+        : {
+            scale: spring(1, springConfig),
+            shadow: spring(1, springConfig)
+          };
+
+        return (
+          <Motion style={motionStyle}>
+            {({scale, shadow}) => (
+                <div
+                  style={{
+                    boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${2 * shadow}px 0px`,
+                    transform: `translate3d(0, 0, 0) scale(${scale})`,
+                    WebkitTransform: `translate3d(0, 0, 0) scale(${scale})`,
+                  }}>
+                  <div>
+                    {col}
+                    <button className="handle">Click me to drag</button>
+                  </div>
+                </div>
+              )
+            }
+          </Motion>
+        );
+      }}
     </Section>
   );
 });

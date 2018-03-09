@@ -2,6 +2,7 @@
 import * as React from 'react';
 import GridBreakpoint from 'grid-breakpoint';
 import pickBy from 'lodash.pickby';
+import type Section from './section';
 import type {ReactDraggableCallbackData} from './types';
 const {Component} = React;
 
@@ -20,7 +21,8 @@ type DraggableState = {
 
 type BoundKey = {
   key: string,
-  bound: DOMRect
+  bound: DOMRect,
+  ref: Section
 }
 
 export default class GridDraggable extends Component<DraggableProps, DraggableState> {
@@ -40,6 +42,7 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
   }
 
   container: ?HTMLDivElement
+  prevBoundingKey: ? number
 
   bounding: {
     [string]: BoundKey
@@ -137,7 +140,7 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     return [];
   }
 
-  getMatchGrid(data: ReactDraggableCallbackData): ?Array<HTMLDivElement> {
+  getMatchGrid(data: ReactDraggableCallbackData): (?{node: Array<HTMLDivElement>, ReactElement: React.Element<*>}) {
     const filterGrid = this.matchGrid(data);
     const allGridEle: Array<HTMLDivElement> = Array.prototype.slice.call(
                           document.querySelectorAll('[data-grid-key]'));
@@ -145,12 +148,35 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     if (filterGrid.length) {
       const matchNode = filterGrid.map(grid => {
         const key = grid.key;
-        return allGridEle.filter(node => {
-          return +node.getAttribute('data-grid-key') === key; // eslint-disable-line no-implicit-coercion
-        });
+        return {
+          key: +key,
+          node: allGridEle.filter(node => {
+            return +node.getAttribute('data-grid-key') === key; // eslint-disable-line no-implicit-coercion
+          }),
+          ReactElement: this.state.children[+key]
+        };
       });
+
+      const currentBoundingKey = matchNode[matchNode.length - 1].key;
+
+      // call unmatch method to remove previous match element
+      if (
+        this.prevBoundingKey !== undefined
+        && this.prevBoundingKey !== null
+        && currentBoundingKey !== this.prevBoundingKey) {
+        this.bounding[`__bounding${this.prevBoundingKey}`].ref.unmatch();
+      }
+
+      if (currentBoundingKey !== this.prevBoundingKey) {
+        // call match method in section
+        this.bounding[`__bounding${currentBoundingKey}`].ref.match();
+        // set current match key to prev
+        this.prevBoundingKey = currentBoundingKey
+      }
+
       return matchNode[matchNode.length - 1];
     }
+
 
     return null;
   }
@@ -185,10 +211,11 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     }
   }
 
-  setBounding(key: string, bound: DOMRect) {
+  setBounding(key: string, bound: DOMRect, ref: Section) {
     this.bounding[`__bounding${key}`] = {
       key,
-      bound
+      bound,
+      ref
     };
   }
 
