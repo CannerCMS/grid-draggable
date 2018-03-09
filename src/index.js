@@ -65,9 +65,6 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     const that = this;
     const childrenWithProps = React.Children.map(props.children,
       (child, i) => {
-        if (!child.type.name || child.type.name !== 'Section') {
-          throw new Error('All children in <GridDraggable/> must be <Section/>')
-        }
         return React.cloneElement(child, {
           dragStart: props.dragStart,
           onDrag: props.onDrag,

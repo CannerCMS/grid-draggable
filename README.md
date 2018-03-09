@@ -72,7 +72,7 @@ ReactDOM.render(
 
 ## API
 
-### <GridDraggable/>
+### `<GridDraggable/>`
 
 `<GridDraggable/>` is a element that wraps all draggable sections. The children pass in this component **must** be `<Section/>`.
 
@@ -97,7 +97,7 @@ Like below:
 
 Other props will directly pass to `grid-breakpoint` such as `lg`, `md`, `sm`, `sx` ... please reference to https://github.com/Canner/grid-breakpoint
 
-### <Section/>
+### `<Section/>`
 
 `<Section/>` is used to create a draggable section that adds draggability to its children. 
 

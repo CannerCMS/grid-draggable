@@ -1,6 +1,6 @@
 {
   "name": "grid-draggable",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Draggable grid system",
   "author": {
     "name": "chilijung",
@@ -50,7 +50,8 @@
     "style-loader": "^0.20.2",
     "webpack": "^4.0.1",
     "webpack-cli": "^2.0.10",
-    "webpack-dev-server": "^3.1.0"
+    "webpack-dev-server": "^3.1.0",
+    "react-motion": "^0.5.2"
   },
   "scripts": {
     "lint": "eslint src test docs",
@@ -79,7 +80,6 @@
   "dependencies": {
     "grid-breakpoint": "^1.5.0",
     "lodash.pickby": "^4.6.0",
-    "react-draggable": "^3.0.5",
-    "react-motion": "^0.5.2"
+    "react-draggable": "^3.0.5"
   }
 }
