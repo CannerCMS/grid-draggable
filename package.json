@@ -1,6 +1,6 @@
 {
   "name": "grid-draggable",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Draggable grid system",
   "author": {
     "name": "chilijung",
@@ -22,6 +22,7 @@
     "babel-core": "^6.14.0",
     "babel-eslint": "^8.2.2",
     "babel-loader": "^7.1.3",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
@@ -46,12 +47,12 @@
     "react": "^16.2.0",
     "react-addons-test-utils": "^15.6.2",
     "react-dom": "^16.2.0",
+    "react-motion": "^0.5.2",
     "rimraf": "^2.5.4",
     "style-loader": "^0.20.2",
     "webpack": "^4.0.1",
     "webpack-cli": "^2.0.10",
-    "webpack-dev-server": "^3.1.0",
-    "react-motion": "^0.5.2"
+    "webpack-dev-server": "^3.1.0"
   },
   "scripts": {
     "lint": "eslint src test docs",
@@ -78,7 +79,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "grid-breakpoint": "^1.5.0",
+    "grid-breakpoint": "^1.6.2",
     "lodash.pickby": "^4.6.0",
     "react-draggable": "^3.0.5"
   }
