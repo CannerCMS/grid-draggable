@@ -13,10 +13,11 @@ type SectionProps = {
   dragStop: (MouseEvent, ReactDraggableCallbackData) => void,
   swapGrid: (data: ReactDraggableCallbackData, fromKey: number) => void,
   container: HTMLDivElement,
-  className: string,
+  className?: string,
   gridKey: string,
-  style: {[string]: any},
-  dragClassName: string,
+  style?: {[string]: any},
+  dragStyle?: {[string]: any},
+  dragClassName?: string,
   handle: string
 }
 
@@ -125,6 +126,7 @@ export default class Section extends React.Component<SectionProps, SectionState>
       className,
       style,
       dragClassName,
+      dragStyle,
       handle
     } = this.props;
     
@@ -153,6 +155,7 @@ export default class Section extends React.Component<SectionProps, SectionState>
           onStop={this.handleStop}>
           <div
             style={dragging && {
+              ...dragStyle,
               position: 'absolute',
               top: 0,
               left: 0,
