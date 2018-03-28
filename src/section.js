@@ -152,11 +152,11 @@ export default class Section extends React.Component<SectionProps, SectionState>
           onDrag={this.handleDrag}
           onStop={this.handleStop}>
           <div
-            style={{
+            style={dragging && {
               position: 'absolute',
               top: 0,
               left: 0,
-              zIndex: dragging ? 200 : 100
+              zIndex:  200
             }}
             className={dragging ? dragClassName : null}>
             {wrappedChildren}
