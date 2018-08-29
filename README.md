@@ -13,7 +13,7 @@ $ npm install --save grid-draggable
 
 Or add
 
-```
+```html
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/react-flexbox-grid@2.1.2/dist/react-flexbox-grid.css"/>
 ```
 
