@@ -23,7 +23,7 @@ into your HTML.
 ```js
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import GridDraggable, {Section} from 'GridDraggable';
+import GridDraggable, {Section} from 'grid-draggable';
 import {range} from 'lodash';
 
 const list = range(20).map((col, i) => {
