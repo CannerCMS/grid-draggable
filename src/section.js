@@ -105,7 +105,7 @@ export default class Section extends React.Component<SectionProps, SectionState>
 
   setBounding() {
     const {setBounding, gridKey} = this.props;
-    setBounding(gridKey, this.refs.grid.parentNode.getBoundingClientRect(), this);
+    setBounding(gridKey, this.grid.parentNode.getBoundingClientRect(), this);
   }
 
   match = () => {
@@ -129,7 +129,7 @@ export default class Section extends React.Component<SectionProps, SectionState>
       dragStyle,
       handle
     } = this.props;
-    
+
     let wrappedChildren = children;
     const {dragging} = this.state;
 
@@ -140,7 +140,7 @@ export default class Section extends React.Component<SectionProps, SectionState>
 
     return (
       <div
-        ref="grid"
+        ref={grid => { this.grid = grid }}
         role="draggable-grid"
         data-grid-key={gridKey}
         className={className}
