@@ -1,5 +1,7 @@
 // @flow
 import * as React from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import GridBreakpoint from 'grid-breakpoint';
 import pickBy from 'lodash.pickby';
 import type Section from './section';
@@ -30,7 +32,7 @@ type BoundKey = {
   ref: Section
 }
 
-export default class GridDraggable extends Component<DraggableProps, DraggableState> {
+class GridDraggable extends Component<DraggableProps, DraggableState> {
   constructor(props: DraggableProps) {
     super(props);
     (this: any).swapGrid = this.swapGrid.bind(this);
@@ -248,4 +250,5 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
   }
 }
 
+export default DragDropContext(HTML5Backend)(GridDraggable);
 export {default as Section} from './section';
