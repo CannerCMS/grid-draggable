@@ -28,6 +28,12 @@ type SectionState = {
   data: ?ReactDraggableCallbackData
 }
 
+const childrenBlockStyle = {
+  left: 0,
+  position: 'absolute',
+  top: 0,
+  zIndex: 200,
+};
 
 export default class Section extends React.Component<SectionProps, SectionState> {
   constructor(props: SectionProps) {
@@ -156,10 +162,7 @@ export default class Section extends React.Component<SectionProps, SectionState>
           <div
             style={dragging && {
               ...dragStyle,
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              zIndex:  200
+              ...childrenBlockStyle,
             }}
             className={dragging ? dragClassName : null}>
             {wrappedChildren}
