@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import flow from 'lodash/flow';
@@ -114,7 +115,8 @@ class Section extends React.Component<SectionProps, SectionState> {
     dragStop: noop
   };
 
-  handleStart(e: MouseEvent, data: ReactDraggableCallbackData) {
+  handleStart(e: MouseEvent) {
+    const data = findDOMNode(e.target);
     this.setState({dragging: true});
     this.props.dragStart(e, data);
   }
