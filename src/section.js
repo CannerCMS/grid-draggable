@@ -217,7 +217,6 @@ class Section extends React.Component<SectionProps, SectionState> {
     } = this.props;
 
     let wrappedChildren = children;
-    // const {dragging} = this.state;
 
     if (typeof children === 'function') {
       const renderedChildren = children(this.state)
