@@ -115,8 +115,12 @@ class Section extends React.Component<SectionProps, SectionState> {
     dragStop: noop
   };
 
+  getNodeByEventTarget(e) {
+    return findDOMNode(e.target);
+  }
+
   handleStart(e: MouseEvent) {
-    const data = findDOMNode(e.target);
+    const data = this.getNodeByEventTarget(e);
     this.setState({dragging: true});
     this.props.dragStart(e, data);
   }
