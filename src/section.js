@@ -74,11 +74,11 @@ const dropTargetSpec = {
       return;
     }
 
-    // TODO(fredalai)
-    // const item = monitor.getItem();
-    // const { gridKey: fromKey } = item;
-    // const { swapGrid } = props;
-    // swapGrid(data, fromKey);
+    const item = monitor.getItem();
+    const { gridKey: fromKey } = item;
+    const { gridKey: toKey } = props;
+
+    props.swapGrid(fromKey, toKey);
 
     return { moved: true };
   },
