@@ -125,7 +125,11 @@ class Section extends React.Component<SectionProps, SectionState> {
     this.props.dragStart(e, data);
   }
 
-  handleDrag(e: MouseEvent, data: ReactDraggableCallbackData) {
+  handleDrag(e: MouseEvent) {
+    const node = this.getNodeByEventTarget(e);
+    const nodeBoundingClientRect = node.getBoundingClientRect();
+    const { x = 0, y = 0 } = nodeBoundingClientRect;
+    const data = { node, x, y };
     const {onDrag, getMatchGrid} = this.props;
     const match = getMatchGrid(data);
     onDrag(e, data, match);
