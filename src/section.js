@@ -135,16 +135,16 @@ class Section extends React.Component<SectionProps, SectionState> {
     onDrag(e, data, match);
   }
 
-  handleStop(e: MouseEvent, data: ReactDraggableCallbackData) {
+  handleStop(e: MouseEvent) {
+    const data = this.getNodeByEventTarget(e);
     const {dragStop} = this.props;
 
     // reset bounding
     this.setBounding();
     dragStop(e, data);
 
-    // swap when stop!
-    // $FlowFixMe
-    const grandParentNode = ((data.node.parentNode: HTMLElement).parentNode: HTMLElement);
+    // TODO(fredalai): Need to make sure have another way to get parentNode since someone situation will get the wrong
+    const grandParentNode = (((data.parentNode: HTMLElement).parentNode: HTMLElement).parentNode: HTMLElement);
     const fromKey = grandParentNode.children[0].getAttribute('data-grid-key');
     this.setState({
       dragging: false,
