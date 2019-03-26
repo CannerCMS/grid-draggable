@@ -1,5 +1,7 @@
 // @flow
 import * as React from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import GridBreakpoint from 'grid-breakpoint';
 import pickBy from 'lodash.pickby';
 import type Section from './section';
@@ -30,7 +32,7 @@ type BoundKey = {
   ref: Section
 }
 
-export default class GridDraggable extends Component<DraggableProps, DraggableState> {
+class GridDraggable extends Component<DraggableProps, DraggableState> {
   constructor(props: DraggableProps) {
     super(props);
     (this: any).swapGrid = this.swapGrid.bind(this);
@@ -189,34 +191,30 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
     return null;
   }
 
-  swapGrid(data: ReactDraggableCallbackData, fromKey: number) {
+  swapGrid(fromKey: number, toKey: number) {
     const {onSwap} = this.props;
     const {children} = this.state;
-    const filterGrid = this.matchGrid(data);
 
-    if (filterGrid.length > 0) {
-      // create new array for children.
-      const newChildren = children.slice();
-      const toKey = filterGrid[0].key;
+    // create new array for children.
+    const newChildren = children.slice();
 
-      if (fromKey !== undefined && toKey !== undefined) {
-        const fromIndex = children.findIndex(child =>
-          child.props.gridKey === fromKey);
-        const toIndex = children.findIndex(child =>
-          child.props.gridKey === toKey);
-        const tmp = newChildren[fromIndex];
-        newChildren[fromIndex] = newChildren[toIndex];
-        newChildren[toIndex] = tmp;
+    if (fromKey !== undefined && toKey !== undefined) {
+      const fromIndex = children.findIndex(child =>
+        child.props.gridKey === fromKey);
+      const toIndex = children.findIndex(child =>
+        child.props.gridKey === toKey);
+      const tmp = newChildren[fromIndex];
+      newChildren[fromIndex] = newChildren[toIndex];
+      newChildren[toIndex] = tmp;
 
-        if (onSwap) {
-          onSwap(fromIndex, toIndex);
-        }
+      if (onSwap) {
+        onSwap(fromIndex, toIndex);
       }
-
-      this.setState({
-        children: newChildren
-      });
     }
+
+    this.setState({
+      children: newChildren
+    });
   }
 
   setBounding(key: string, bound: DOMRect, ref: Section) {
@@ -248,4 +246,5 @@ export default class GridDraggable extends Component<DraggableProps, DraggableSt
   }
 }
 
+export default DragDropContext(HTML5Backend)(GridDraggable);
 export {default as Section} from './section';
